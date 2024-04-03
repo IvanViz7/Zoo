@@ -6,14 +6,14 @@ class Zoo:
         self.habitats.append(habitat)
     
     def add_animal(self, animal):
-        print("Select a habitat to add the animal to:")
+        print("\nSelect a habitat to add the animal to:")
         for i, habitat in enumerate(self.habitats):
             print(f"{i+1}. {habitat.name}")
-        habitat_index = int(input("Enter the habitat number: ")) - 1
+        habitat_index = int(input("\nEnter the habitat number: ")) - 1
         self.habitats[habitat_index].add_animal(animal)
     
     def display_info(self):
-        print(f'Guadalajara Zoo:')
+        print(f'\nGuadalajara Zoo:\n')
         if not self.habitats:
             print("* Empty zoo *")
         else:
@@ -47,40 +47,45 @@ class Animal:
         pass  
           
     def info(self):
-        print(f'The name of the {self.specie} is {self.name}, {self.name} is a {self.type} and it weights {self.weight} lb')
+        print(f'- {self.name} is a {self.specie}, is a {self.type} and it weights {self.weight} lb')
         
 zoo = Zoo()
 
 def get_user_choice():
     while True:
         zoo.display_info()
-        print("What would you like to add?")
+        print("\nWhat would you like to add?")
         print("1. Animal")
         print("2. Habitat")
-        choice = input("Enter your choice (1 or 2): ")
+        choice = input("\nEnter your choice (1 or 2): ")
         if choice == "1":
-            while True:
-                print("What type of animal would you like to add?")
-                print("1. Reptile")
-                print("2. Mammal")
-                print("3. Fish")
-                animal_type_choice = input("Enter your choice (1, 2 or 3): ")
-                if animal_type_choice in ["1", "2", "3"]:
-                    return choice, animal_type_choice
-                else:
-                    print("Invalid choice. Please enter 1, 2 or 3.")
+            print("\nWhat type of animal would you like to add?")
+            print("1. Reptile")
+            print("2. Mammal")
+            print("3. Fish")
+            animal_type_choice = input("\nEnter your choice (1, 2 or 3): ")
+            if animal_type_choice in ["1", "2", "3"]:
+                name = input("\nEnter the name of the animal: ")
+                species = input("\nEnter the species of the animal: ")
+                weight = float(input("\nEnter the weight in lbs of the animal: "))
+                animal_type = None
+                if animal_type_choice == "1":
+                    animal_type = "Reptile"
+                elif animal_type_choice == "2":
+                    animal_type = "Mammal"
+                elif animal_type_choice == "3":
+                    animal_type = "Fish"
+                return choice, animal_type, name, species, weight
+            else:
+                print("Invalid choice. Please enter 1, 2 or 3.")
         elif choice == "2":
-            return choice, None
+            return choice, None, None, None, None
         else:
             print("Invalid choice. Please enter 1 or 2.")
 
 while True:
-    user_choice = get_user_choice()
+    user_choice, animal_type, name, species, weight = get_user_choice()
     if user_choice == "1":
-        name = input("Enter the name of the animal: ")
-        animal_type = input("Enter the type of the animal: ")
-        species = input("Enter the species of the animal: ")
-        weight = float(input("Enter the weight of the animal: "))
         new_animal = Animal(name, animal_type, species, weight)
         zoo.add_animal(new_animal)
     elif user_choice == "2":
@@ -88,8 +93,9 @@ while True:
         new_habitat = Habitat(habitat_name)
         zoo.add_habitat(new_habitat)
     
-    another_action = input("Do you want to add another animal or habitat? (yes/no): ")
+    another_action = input("\nDo you want to add another animal or habitat? (yes/no): ")
     if another_action.lower() != "yes":
         break
-
+    
+print("\nThe Zoo was formed this way:\n")
 zoo.display_info()
