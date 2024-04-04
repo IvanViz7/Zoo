@@ -1,6 +1,6 @@
 class Zoo:
     def __init__(self):
-        self.habitats = []
+        self.habitats = []   
     
     def add_habitat(self, habitat):
         self.habitats.append(habitat)
@@ -13,7 +13,7 @@ class Zoo:
         self.habitats[habitat_index].add_animal(animal)
     
     def display_info(self):
-        print(f'\nGuadalajara Zoo:\n')
+        print(f'\n* * * Welcome to Zoo * * *\n')
         if not self.habitats:
             print("* Empty zoo *")
         else:
@@ -29,7 +29,7 @@ class Habitat:
         self.animals.append(animal)
     
     def display_info(self):
-        print(f'Habitat: {self.name}')
+        print(self.name)
         for animal in self.animals:
             animal.info()
 
@@ -47,9 +47,12 @@ class Animal:
         pass  
           
     def info(self):
-        print(f'- {self.name} is a {self.specie}, is a {self.type} and it weights {self.weight} lb')
+        print(f'- {self.name} the {self.specie}, is a {self.type} and it weights {self.weight} lb')
         
 zoo = Zoo()
+zoo.add_habitat(Habitat("Jungle"))
+zoo.add_habitat(Habitat("Flock"))
+zoo.add_habitat(Habitat("Forest"))
 
 def get_user_choice():
     while True:
