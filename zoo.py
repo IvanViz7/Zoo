@@ -6,14 +6,21 @@ class Zoo:
         self.habitats.append(habitat)
     
     def add_animal(self, animal):
-        print("\nSelect a habitat to add the animal to:")
-        for i, habitat in enumerate(self.habitats):
-            print(f"{i+1}. {habitat.name}")
-        habitat_index = int(input("\nEnter the habitat number: ")) - 1
-        self.habitats[habitat_index].add_animal(animal)
+        while True:
+            print("\nSelect a habitat to add the animal to:")
+            for i, habitat in enumerate(self.habitats):
+                print(f"{i+1}. {habitat.name}")
+            habitat_index = int(input("\nEnter the habitat number: ")) - 1
+            habitat = self.habitats[habitat_index]
+            if habitat.is_compatible(animal):
+                habitat.add_animal(animal)
+                print(f"\n{animal.name} was successfully added to {habitat.name}.")
+                break
+            else:
+                print(f"\nCannot add {animal.name} to {habitat.name}. Incompatible animal types.")
     
     def display_info(self):
-        print(f'\nGuadalajara Zoo:\n')
+        print(f'\nWelcome to Zoo:\n')
         if not self.habitats:
             print("* Empty zoo *")
         else:
@@ -27,6 +34,15 @@ class Habitat:
     
     def add_animal(self, animal):   
         self.animals.append(animal)
+        
+    def is_compatible(self, new_animal):
+        if not self.animals:
+            return True
+        animal_types = set([animal.type for animal in self.animals])
+        if new_animal.type not in animal_types:
+            return False
+        predators = set([animal.predator for animal in self.animals])
+        return new_animal.predator in predators
     
     def display_info(self):
         print(f'Habitat: {self.name}')
@@ -91,14 +107,32 @@ def get_user_choice():
             else:
                 print("Invalid choice. Please enter 1, 2 or 3.")
         elif choice == "2":
-            return choice, None, None, None, None, None
+            return choice, None, None, None, None, None, None
         else:
             print("Invalid choice. Please enter 1 or 2.")
             
+# Crear el zoo
 zoo = Zoo()
-zoo.add_habitat(Habitat("Jungle"))
-zoo.add_habitat(Habitat("Flock"))
-zoo.add_habitat(Habitat("Marine"))
+
+# Crear hábitats predeterminados
+jungle = Habitat("Jungle")
+flock = Habitat("Flock")
+marine = Habitat("Marine")
+
+# Añadir los hábitats al zoo
+zoo.add_habitat(jungle)
+zoo.add_habitat(flock)
+zoo.add_habitat(marine)
+
+# Crear animales predeterminados
+default_reptile = Reptile("Coco", "Lizard", 500.0, True, False)
+default_mammal = Mammal("Tonio", "Tiger", 200.0, True, 3)
+default_fish = Animal("Nemo", "Fish", "Clown", 1.0, False)
+
+# Añadir los animales a los hábitats correspondientes
+jungle.add_animal(default_reptile)
+flock.add_animal(default_mammal)
+marine.add_animal(default_fish)
 
 while True:
     user_choice, name, species, weight, predator, animal_type, additional_info = get_user_choice()
