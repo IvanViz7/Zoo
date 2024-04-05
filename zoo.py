@@ -1,82 +1,8 @@
-class Zoo:
-    def __init__(self):
-        self.habitats = []
-    
-    def add_habitat(self, habitat):
-        self.habitats.append(habitat)
-    
-    def add_animal(self, animal):
-        while True:
-            print("\nSelect a habitat to add the animal to:")
-            for i, habitat in enumerate(self.habitats):
-                print(f"{i+1}. {habitat.name}")
-            habitat_index = int(input("\nEnter the habitat number: ")) - 1
-            habitat = self.habitats[habitat_index]
-            if habitat.is_compatible(animal):
-                habitat.add_animal(animal)
-                print(f"\n{animal.name} was successfully added to {habitat.name}.")
-                break
-            else:
-                print(f"\nCannot add {animal.name} to {habitat.name}. Incompatible animal types.")
-    
-    def display_info(self):
-        print(f'\nWelcome to Zoo:\n')
-        if not self.habitats:
-            print("* Empty zoo *")
-        else:
-            for habitat in self.habitats:
-                habitat.display_info()
-
-class Habitat:
-    def __init__(self, name):
-        self.name = name
-        self.animals = []
-    
-    def add_animal(self, animal):   
-        self.animals.append(animal)
-        
-    def is_compatible(self, new_animal):
-        if not self.animals:
-            return True
-        animal_types = set([animal.type for animal in self.animals])
-        if new_animal.type not in animal_types:
-            return False
-        predators = set([animal.predator for animal in self.animals])
-        return new_animal.predator in predators
-    
-    def display_info(self):
-        print(f'Habitat: {self.name}')
-        for animal in self.animals:
-            animal.info()
-
-class Animal:
-    def __init__(self, name, type, specie, weight, predator):
-        self.name = name
-        self.type = type
-        self.specie = specie
-        self.weight = weight
-        self.predator = predator
-          
-    def info(self):
-        print(f'- {self.name} is a {self.specie}, is a {self.type} and it weights {self.weight} lb')
-
-class Reptile(Animal):
-    def __init__(self, name, specie, weight, predator, venomous):
-        super().__init__(name, "Reptile", specie, weight, predator)
-        self.venomous = venomous
-
-    def info(self):
-        venom_status = "venomous" if self.venomous else "non-venomous"
-        print(f'- {self.name} is a {self.specie}, is a {self.type} and it weights {self.weight} lb. It is {venom_status}.')
-
-
-class Mammal(Animal):
-    def __init__(self, name, specie, weight, predator, little_size):
-        super().__init__(name, "Mammal", specie, weight, predator)
-        self.little_size = little_size
-
-    def info(self):
-        print(f'- {self.name} is a {self.specie}, is a {self.type} and it weights {self.weight} lb. It can have {self.little_size} children.')
+import module_zoo
+import module_habitat
+import module_animal
+import module_reptile
+import module_mammal
 
 def get_user_choice():
     while True:
@@ -112,12 +38,12 @@ def get_user_choice():
             print("Invalid choice. Please enter 1 or 2.")
             
 # Crear el zoo
-zoo = Zoo()
+zoo = module_zoo.Zoo()
 
 # Crear hábitats predeterminados
-jungle = Habitat("Jungle")
-flock = Habitat("Flock")
-marine = Habitat("Marine")
+jungle = module_habitat.Habitat("Jungle")
+flock = module_habitat.Habitat("Flock")
+marine = module_habitat.Habitat("Marine")
 
 # Añadir los hábitats al zoo
 zoo.add_habitat(jungle)
@@ -125,9 +51,9 @@ zoo.add_habitat(flock)
 zoo.add_habitat(marine)
 
 # Crear animales predeterminados
-default_reptile = Reptile("Coco", "Lizard", 500.0, True, False)
-default_mammal = Mammal("Tonio", "Tiger", 200.0, True, 3)
-default_fish = Animal("Nemo", "Fish", "Clown", 1.0, False)
+default_reptile = module_reptile.Reptile("Coco", "Lizard", 500.0, True, False)
+default_mammal = module_mammal.Mammal("Tonio", "Tiger", 200.0, True, 3)
+default_fish = module_animal.Animal("Nemo", "Fish", "Clown", 1.0, False)
 
 # Añadir los animales a los hábitats correspondientes
 jungle.add_animal(default_reptile)
@@ -138,15 +64,15 @@ while True:
     user_choice, name, species, weight, predator, animal_type, additional_info = get_user_choice()
     if user_choice == "1":
         if animal_type == "Reptile":
-            new_animal = Reptile(name, species, weight, predator, additional_info)
+            new_animal = module_reptile.Reptile(name, species, weight, predator, additional_info)
         elif animal_type == "Mammal":
-            new_animal = Mammal(name, species, weight, predator, additional_info)
+            new_animal = module_mammal.Mammal(name, species, weight, predator, additional_info)
         else:
-            new_animal = Animal(name, "Fish", species, weight, predator)
+            new_animal = module_animal.Animal(name, "Fish", species, weight, predator)
         zoo.add_animal(new_animal)
     elif user_choice == "2":
         habitat_name = input("Enter the name of the habitat: ")
-        new_habitat = Habitat(habitat_name)
+        new_habitat = module_habitat.Habitat(habitat_name)
         zoo.add_habitat(new_habitat)
     
     another_action = input("\nDo you want to add another animal or habitat? (yes/no): ")
