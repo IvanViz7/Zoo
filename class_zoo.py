@@ -28,6 +28,14 @@ class Zoo:
                 habitat.add_animal(animal)
             else:
                 print(f"\nCannot add {animal.name} to {habitat.name}. Incompatible animal types.")
+                add_habitat_cause_nocomp = input(f'\nWould you like to add an habitat for {animal.name} (Y/N): ').lower()
+                if add_habitat_cause_nocomp == "y":
+                    name_new_habitat = input('\nEnter the name of the new habitat: ')
+                    capacity = int(input('\nEnter the capacity of the new habitat: '))
+                    new_habitat = class_habitat.Habitat(name_new_habitat, capacity)
+                    self.add_habitat(new_habitat)
+                    habitat = new_habitat
+                    habitat.add_animal(animal)
         else:
             print(f"\n{habitat.name} is full. Creating a new habitat...")
             name_new_habitat = self.generate_habitat_name(habitat.name)
