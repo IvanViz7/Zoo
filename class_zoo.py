@@ -16,26 +16,37 @@ class Zoo:
 
         if habitat_index == len(self.habitats):
             name_new_habitat = input('\nEnter the name of the new habitat: ')
-            new_habitat = class_habitat.Habitat(name_new_habitat)
+            capacity = int(input('\nEnter the capacity of the new habitat: '))
+            new_habitat = class_habitat.Habitat(name_new_habitat, capacity)
             self.add_habitat(new_habitat)
             habitat = new_habitat
         else:
             habitat = self.habitats[habitat_index]
                 
-        if habitat.is_compatible(animal):
-            habitat.add_animal(animal)
-            print(f"\n{animal.name} was successfully added to {habitat.name}.")
-        else:
-            print(f"\nCannot add {animal.name} to {habitat.name}. Incompatible animal types.")
-            add_habitat_cause_nocomp = input(f'\nWould you like to add an habitat for {animal.name} (Y/N): ').lower()
-            if add_habitat_cause_nocomp == "y":
-                name_new_habitat = input('\nEnter the name of the new habitat: ')
-                new_habitat = class_habitat.Habitat(name_new_habitat)
-                self.add_habitat(new_habitat)
-                habitat = new_habitat
+        if len(habitat.animals) < habitat.capacity:
+            if habitat.is_compatible(animal):
                 habitat.add_animal(animal)
-                print(f"\n{animal.name} was successfully added to {habitat.name}.")
-                
+            else:
+                print(f"\nCannot add {animal.name} to {habitat.name}. Incompatible animal types.")
+        else:
+            print(f"\n{habitat.name} is full. Creating a new habitat...")
+            name_new_habitat = self.generate_habitat_name(habitat.name)
+            new_habitat = class_habitat.Habitat(name_new_habitat, habitat.capacity)
+            self.add_habitat(new_habitat)
+            new_habitat.add_animal(animal)
+            
+    def generate_habitat_name(self, base_name):
+        count = 2
+        new_name = base_name
+        if base_name[-1].isdigit():
+            while base_name[-1].isdigit():
+                base_name = base_name[:-1]
+        else:
+            base_name += " "
+        while any(habitat.name == new_name for habitat in self.habitats):
+            new_name = f"{base_name}{count}"
+            count += 1
+        return new_name
     
     def get_user_choice(self):
         while True:
@@ -54,9 +65,9 @@ class Zoo:
                     name = input("\nEnter the name of the animal: ")
                     species = input("\nEnter the species of the animal: ")
                     weight = float(input("\nEnter the weight in lbs of the animal: "))
-                    predator = input("\nIs the animal a predator? (Y/N): ").lower() == "y"
+                    predator = input("\nIs the animal a predator? (yes/no): ").lower() == "yes"
                     if animal_type_choice == "1":
-                        venomous = input("\nIs the reptile venomous? (Y/N): ").lower() == "y"
+                        venomous = input("\nIs the reptile venomous? (yes/no): ").lower() == "yes"
                         return choice, name, species, weight, predator, "Reptile", venomous
                     elif animal_type_choice == "2":
                         little_size = int(input("\nEnter the number of puppies: "))
@@ -71,7 +82,7 @@ class Zoo:
                 print("Invalid choice. Please enter 1 or 2.")
             
     def display_info(self):
-        print(f'\nWelcome to Zoo:\n')
+        print(f'\n*** Welcome to Zoo ***\n')
         if not self.habitats:
             print("* Empty zoo *")
         else:

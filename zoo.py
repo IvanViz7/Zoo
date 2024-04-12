@@ -8,9 +8,9 @@ import class_mammal
 zoo = class_zoo.Zoo()
 
 # Crear hábitats predeterminados
-jungle = class_habitat.Habitat("Jungle")
-flock = class_habitat.Habitat("Flock")
-marine = class_habitat.Habitat("Marine")
+jungle = class_habitat.Habitat("Jungle", 2)
+flock = class_habitat.Habitat("Flock", 2)
+marine = class_habitat.Habitat("Marine", 2)
 
 # Añadir los hábitats al zoo
 zoo.add_habitat(jungle)
@@ -39,7 +39,8 @@ while True:
         zoo.add_animal(new_animal)
     elif user_choice == "2":
         habitat_name = input("Enter the name of the habitat: ")
-        new_habitat = class_habitat.Habitat(habitat_name)
+        capacity = int(input('\nEnter the capacity of the new habitat: '))
+        new_habitat = class_habitat.Habitat(habitat_name, capacity)
         zoo.add_habitat(new_habitat)
     
     another_action = input("\nDo you want to add another animal or habitat? (Y/N): ")

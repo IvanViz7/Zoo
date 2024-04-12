@@ -1,10 +1,15 @@
 class Habitat:
-    def __init__(self, name):
+    def __init__(self, name, capacity):
         self.name = name
+        self.capacity = capacity
         self.animals = []
     
     def add_animal(self, animal):   
-        self.animals.append(animal)
+        if len(self.animals) < self.capacity:
+            self.animals.append(animal)
+            print(f"{animal.name} was successfully added to {self.name}.")
+        else:
+            print(f"Cannot add {animal.name} to {self.name}. Habitat is full.")
         
     def is_compatible(self, new_animal):
         if not self.animals:
@@ -17,5 +22,11 @@ class Habitat:
     
     def display_info(self):
         print(f'Habitat: {self.name}')
-        for animal in self.animals:
-            animal.info()
+        print(f'Capacity: {self.capacity}')
+        if not self.animals:
+            print("No animals in this habitat.")
+        else:
+            print(f'Animals:')
+            for animal in self.animals:
+                animal.info()
+        print(f'\n')
