@@ -24,7 +24,6 @@ class Zoo:
                 
         if habitat.is_compatible(animal):
             habitat.add_animal(animal)
-            print(f"\n{habitat.name} was added to the Zoo")
             print(f"\n{animal.name} was successfully added to {habitat.name}.")
         else:
             print(f"\nCannot add {animal.name} to {habitat.name}. Incompatible animal types.")
